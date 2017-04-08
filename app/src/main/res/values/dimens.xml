@@ -1,0 +1,6 @@
+<resources>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="title_text">16sp</dimen>
+    <dimen name="recyclerview_margin">4dp</dimen>
+    <dimen name="margin_task_text">8dp</dimen>
+</resources>
