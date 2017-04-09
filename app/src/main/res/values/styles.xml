@@ -13,8 +13,19 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+
+    <style name="AppTheme.ReminderDialog">
+    <item name="android:windowBackground">@color/white</item>
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:windowIsFloating">true</item>
+    <item name="android:layout_gravity">center</item>
+    <item name="android:windowCloseOnTouchOutside">true</item>
+    <item name="colorControlActivated">@color/colorAccent</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <color name="white">#FFFFFFFF</color>
 </resources>

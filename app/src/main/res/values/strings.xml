@@ -1,4 +1,19 @@
 <resources>
     <string name="app_name">RemindThere</string>
     <string name="action_settings">Settings</string>
+    <string name="title">Title/Category</string>
+    <string name="add_item">Add item</string>
+    <string name="title_activity_add_item">Add item</string>
+    <string name="save_item">Save item</string>
+    <string name="title_activity_edit_item">Edit task</string>
+    <string name="add_checkbox">Add checkboxes</string>
+    <string name="add_reminder_message">Add a reminder..</string>
+    <string name="cancel_action">Cancel</string>
+    <string name="set_reminder">Add</string>
+
+    <string name="api_key">AIzaSyC7awnCDItO9F3cGzq37_H1FTcw-DSwWwE</string>
+    <string name="cancel">Cancel</string>
+    <string name="add_location_reminder">Add</string>
+    <string name="add_location_reminder_message">Add Reminder to Location</string>
+    <string name="selected_location">Selected Location</string>
 </resources>
