@@ -26,7 +26,7 @@ public class InnerRVAdapter extends RecyclerView.Adapter<InnerRVAdapter.InnerAda
 
     @Override
     public InnerAdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_row_outer_recyclerview, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.single_row_inner_recyclerview, parent, false);
         context = parent.getContext();
         return new InnerRVAdapter.InnerAdapterViewHolder(v);
     }

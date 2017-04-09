@@ -10,6 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import shivamjindal.remindthere.models.TasksContainer;
+
 /**
  * Created by shivam on 8/4/17.
  */
@@ -28,10 +33,10 @@ public class MainFragment extends Fragment {
         outerRecyclerView = (RecyclerView) view.findViewById(R.id.outer_recycler_view);
         outerRecyclerView.setHasFixedSize(true);
 
-
-
-        outerRVAdapter = new OuterRVAdapter( list );
+        DatabaseAdapter databaseAdapter = new DatabaseAdapter(getContext());
+        outerRVAdapter = new OuterRVAdapter(databaseAdapter.getAllTasks());
         outerRecyclerView.setAdapter(outerRVAdapter);
+
         LinearLayoutManager llm = new LinearLayoutManager(getContext());
         outerRecyclerView.setLayoutManager(llm);
         return view;
