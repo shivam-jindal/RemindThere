@@ -10,6 +10,7 @@ public class TasksContainer {
 
     private String title;
     private List<Task> tasks;
+    private int categoryId;
 
     public String getTitle() {
         return title;
@@ -26,4 +27,13 @@ public class TasksContainer {
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
     }
+
+    public int getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
 }
