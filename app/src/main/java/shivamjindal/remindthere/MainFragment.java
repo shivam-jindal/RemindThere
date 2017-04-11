@@ -1,19 +1,16 @@
 package shivamjindal.remindthere;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import shivamjindal.remindthere.models.TasksContainer;
 
 /**
  * Created by shivam on 8/4/17.
@@ -21,8 +18,10 @@ import shivamjindal.remindthere.models.TasksContainer;
 
 public class MainFragment extends Fragment {
 
-    RecyclerView outerRecyclerView;
+    static RecyclerView outerRecyclerView;
     OuterRVAdapter outerRVAdapter;
+    StaggeredGridLayoutManager staggeredGridLayoutManager;
+    LinearLayoutManager linearLayoutManager;
 
 
     @Nullable
@@ -37,8 +36,9 @@ public class MainFragment extends Fragment {
         outerRVAdapter = new OuterRVAdapter(databaseAdapter.getAllTasks());
         outerRecyclerView.setAdapter(outerRVAdapter);
 
-        LinearLayoutManager llm = new LinearLayoutManager(getContext());
-        outerRecyclerView.setLayoutManager(llm);
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        linearLayoutManager = new LinearLayoutManager(getContext());
+        outerRecyclerView.setLayoutManager(linearLayoutManager);
         return view;
     }
 }
