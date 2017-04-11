@@ -10,7 +10,6 @@ import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import shivamjindal.remindthere.models.Task;
 import shivamjindal.remindthere.models.TasksContainer;
@@ -19,7 +18,7 @@ import shivamjindal.remindthere.models.TasksContainer;
  * Created by shivam on 9/4/17.
  */
 
-public class DatabaseAdapter {
+class DatabaseAdapter {
 
     private DatabaseHelper helper;
     private SQLiteDatabase db;
@@ -92,6 +91,15 @@ public class DatabaseAdapter {
         }
         cursorForCategories.close();
         return listOfContainers;
+    }
+
+
+    void insertTimeReminder(int categoryId, String reminderDate, String reminderTime) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHelper.CATEGORY_ID, categoryId);
+        contentValues.put(DatabaseHelper.REMINDER_DATE, reminderDate);
+        contentValues.put(DatabaseHelper.REMINDER_TIME, reminderTime);
+        db.insert(DatabaseHelper.DATE_REMINDER_TABLE, null, contentValues);
     }
 
 
