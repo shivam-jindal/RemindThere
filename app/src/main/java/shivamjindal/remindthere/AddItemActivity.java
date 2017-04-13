@@ -1,9 +1,8 @@
 package shivamjindal.remindthere;
 
-import android.animation.TimeInterpolator;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -33,7 +32,9 @@ import java.util.List;
  * Created by shivam on 9/4/17.
  */
 
-public class AddItemActivity extends AppCompatActivity implements TimeReminderDialog.dialogListener {
+public class AddItemActivity extends AppCompatActivity
+        implements TimeReminderDialog.dialogListener,
+        LocationReminderDialog.LocationDialogListener {
 
     TextView addItemButton;
     EditText title;
@@ -69,6 +70,7 @@ public class AddItemActivity extends AppCompatActivity implements TimeReminderDi
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT));
                 layoutTasks.addView(newTask);
+                newTask.setHint("Task " + layoutTasks.getChildCount());
                 newTask.requestFocus();
             }
         });
@@ -114,14 +116,14 @@ public class AddItemActivity extends AppCompatActivity implements TimeReminderDi
                 String placeLongitude = String.valueOf(placeLatLng.longitude);
                 Log.i("place details : ", details);
 
-                title.setText(place.getName());
 
-                /*Intent intent = new Intent(this, QuestionsActivity.class);
-                intent.putExtra("ADDRESS", (String) place.getName());
-                intent.putExtra("LATITUDE", String.valueOf(placeLatLng.latitude));
-                intent.putExtra("LONGITUDE", String.valueOf(placeLatLng.longitude));
-                startActivity(intent);
-                */
+                LocationReminderDialog locationReminderDialog = LocationReminderDialog.newInstance(
+                        title.getText().toString(),
+                        categoryId,
+                        (String) place.getName(),
+                        AddItemActivity.this);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                locationReminderDialog.show(fragmentManager, "Location Reminder Dialog");
             }
         }
     }
@@ -175,6 +177,11 @@ public class AddItemActivity extends AppCompatActivity implements TimeReminderDi
 
     @Override
     public void onDialogDismiss() {
+
+    }
+
+    @Override
+    public void onLocationDialogDismiss() {
 
     }
 }

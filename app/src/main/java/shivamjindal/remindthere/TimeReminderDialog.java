@@ -30,7 +30,7 @@ import java.util.Date;
  * Created by shivam on 9/4/17.
  */
 
-public class TimeReminderDialog extends DialogFragment{
+public class TimeReminderDialog extends DialogFragment {
 
     int selectedYear, selectedMonth, selectedDay, selectedHour, selectedMinute;
     String titleText;
@@ -44,9 +44,10 @@ public class TimeReminderDialog extends DialogFragment{
      * Creates new instance of reminder dialog
      * notificationText, id and listener are passed as arguments
      * so that dialog may get these values when required
-     * @param titleText text of clicked notification
+     *
+     * @param titleText  text of clicked notification
      * @param categoryId id of clicked notification
-     * @param listener listener to handle dismiss events
+     * @param listener   listener to handle dismiss events
      * @return new instance of ReminderDialog
      */
     public static TimeReminderDialog newInstance(String titleText, int categoryId, dialogListener listener) {
@@ -193,6 +194,7 @@ public class TimeReminderDialog extends DialogFragment{
     /**
      * Create a pending intent which has details(text,id) of notification and set the alarm
      * insert this in database and dismiss the dialog
+     *
      * @param targetCal Calendar object having time to be set as reminder
      */
     private void setAlarm(Calendar targetCal) {
@@ -229,7 +231,7 @@ public class TimeReminderDialog extends DialogFragment{
         super.onDismiss(dialog);
     }
 
-    public interface dialogListener {
+    interface dialogListener {
         void onDialogDismiss();
     }
 }

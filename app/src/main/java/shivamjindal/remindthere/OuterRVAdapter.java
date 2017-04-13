@@ -1,6 +1,7 @@
 package shivamjindal.remindthere;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -41,11 +42,19 @@ class OuterRVAdapter extends RecyclerView.Adapter<OuterRVAdapter.OuterAdapterVie
             holder.taskTitle.setText(taskList.get(position).getTitle());
         }
 
-        InnerRVAdapter innerRVAdapter = new InnerRVAdapter(taskList.get(position));
+        final InnerRVAdapter innerRVAdapter = new InnerRVAdapter(taskList.get(position));
         holder.innerRecyclerView.setAdapter(innerRVAdapter);
         LinearLayoutManager llm = new LinearLayoutManager(context);
         holder.innerRecyclerView.setLayoutManager(llm);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context, EditItemActivity.class));
+            }
+        });
     }
+
 
     @Override
     public int getItemCount() {
@@ -55,6 +64,7 @@ class OuterRVAdapter extends RecyclerView.Adapter<OuterRVAdapter.OuterAdapterVie
             return taskList.size();
         }
     }
+
 
     class OuterAdapterViewHolder extends RecyclerView.ViewHolder {
         TextView taskTitle;

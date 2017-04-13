@@ -103,6 +103,15 @@ class DatabaseAdapter {
     }
 
 
+    void insertLocationReminder(int categoryId, String location) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHelper.CATEGORY_ID, categoryId);
+        contentValues.put(DatabaseHelper.REMINDER_LOCATION, location);
+        db.insert(DatabaseHelper.LOCATION_REMINDER_TABLE, null, contentValues);
+    }
+
+
+
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
         private static final String DATABASE_NAME = "mainDatabase";
