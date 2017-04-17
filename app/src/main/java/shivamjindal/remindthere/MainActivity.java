@@ -1,7 +1,9 @@
 package shivamjindal.remindthere;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,10 +14,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Locale;
+
+import static shivamjindal.remindthere.R.id.fab;
 
 public class MainActivity extends AppCompatActivity {
 
     boolean linearView = true;
+    int REQ_CODE_SPEECH_INPUT = 11;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +39,67 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.container_content_main, mainFragment, "MainFragment");
         transaction.commit();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        com.github.clans.fab.FloatingActionButton fabTextInput =
+                (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fab_text_input);
+        fabTextInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, AddItemActivity.class));
             }
         });
+
+        com.github.clans.fab.FloatingActionButton fabVoiceInput =
+                (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fab_voice_input);
+        fabVoiceInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                promptSpeechInput();
+            }
+        });
     }
+
+
+    /**
+     * Showing google speech input dialog
+     */
+    private void promptSpeechInput() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
+                getString(R.string.speech_prompt));
+        try {
+            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
+        } catch (ActivityNotFoundException a) {
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.speech_not_supported),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    /**
+     * Receiving speech input
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQ_CODE_SPEECH_INPUT) {
+            if (resultCode == RESULT_OK && null != data) {
+
+                ArrayList<String> result = data
+                        .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+
+                Constants.showToast(MainActivity.this, result.toString());
+            }
+        }
+        else{
+            Constants.showToast(MainActivity.this, "Some problem occurred!");
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
             menu.getItem(0).setIcon(R.drawable.view_linear_layout);
         return true;
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
