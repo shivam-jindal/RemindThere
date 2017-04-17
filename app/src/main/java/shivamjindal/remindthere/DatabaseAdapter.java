@@ -35,6 +35,22 @@ class DatabaseAdapter {
 
 
     void insertTask(String title, List<String> tasks, int categoryId, boolean checkVisible) {
+        String[] columns = {
+                DatabaseHelper.TASK_TEXT
+        };
+        Cursor cursor = db.query(DatabaseHelper.TASK_TABLE,
+                columns,
+                DatabaseHelper.CATEGORY_ID + " =? ",
+                new String[]{String.valueOf(categoryId)},
+                null, null, null, null);
+
+        if (cursor.getCount() > 0) {
+            db.delete(DatabaseHelper.TASK_TABLE,
+                    DatabaseHelper.CATEGORY_ID + " =? ",
+                    new String[]{String.valueOf(categoryId)});
+        }
+        cursor.close();
+
         for (int i = 0; i < tasks.size(); i++) {
             ContentValues contentValues = new ContentValues();
             contentValues.put(DatabaseHelper.TASK_TITLE, title);
@@ -44,13 +60,43 @@ class DatabaseAdapter {
 
             try {
                 db.insert(DatabaseHelper.TASK_TABLE,
-                        null,
+                        DatabaseHelper.TASK_TEXT,
                         contentValues);
                 Log.i("success", "in inserting task");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    TasksContainer getTaskContainer(int categoryId) {
+        TasksContainer tasksContainer = new TasksContainer();
+        String[] columns = {
+                DatabaseHelper.TASK_TEXT,
+                DatabaseHelper.CHECK_VISIBLE,
+                DatabaseHelper.CHECKED,
+                DatabaseHelper.TASK_TITLE
+        };
+        Cursor cursor = db.query(DatabaseHelper.TASK_TABLE,
+                columns,
+                DatabaseHelper.CATEGORY_ID + " =? ",
+                new String[]{String.valueOf(categoryId)},
+                null, null, null, null);
+
+        List<Task> tasks = new ArrayList<>();
+        while (cursor.moveToNext()) {
+            tasksContainer.setTitle(cursor.getString(3));
+            tasksContainer.setCategoryId(categoryId);
+            Task task = new Task();
+            task.setTaskName(cursor.getString(0));
+            task.setChecked(cursor.getInt(1) > 0);
+            task.setCheckVisible(cursor.getInt(2) > 0);
+            tasks.add(task);
+        }
+        tasksContainer.setTasks(tasks);
+        cursor.close();
+        return tasksContainer;
     }
 
 
@@ -95,6 +141,22 @@ class DatabaseAdapter {
 
 
     void insertTimeReminder(int categoryId, String reminderDate, String reminderTime) {
+        String[] columns = {
+                DatabaseHelper.REMINDER_DATE
+        };
+        Cursor cursor = db.query(DatabaseHelper.DATE_REMINDER_TABLE,
+                columns,
+                DatabaseHelper.CATEGORY_ID + " =? ",
+                new String[]{String.valueOf(categoryId)},
+                null, null, null, null);
+
+        if (cursor.getCount() > 0) {
+            db.delete(DatabaseHelper.DATE_REMINDER_TABLE,
+                    DatabaseHelper.CATEGORY_ID + " =? ",
+                    new String[]{String.valueOf(categoryId)});
+        }
+        cursor.close();
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.CATEGORY_ID, categoryId);
         contentValues.put(DatabaseHelper.REMINDER_DATE, reminderDate);
@@ -104,12 +166,27 @@ class DatabaseAdapter {
 
 
     void insertLocationReminder(int categoryId, String location) {
+        String[] columns = {
+                DatabaseHelper.REMINDER_LOCATION
+        };
+        Cursor cursor = db.query(DatabaseHelper.LOCATION_REMINDER_TABLE,
+                columns,
+                DatabaseHelper.CATEGORY_ID + " =? ",
+                new String[]{String.valueOf(categoryId)},
+                null, null, null, null);
+
+        if (cursor.getCount() > 0) {
+            db.delete(DatabaseHelper.LOCATION_REMINDER_TABLE,
+                    DatabaseHelper.CATEGORY_ID + " =? ",
+                    new String[]{String.valueOf(categoryId)});
+        }
+        cursor.close();
+
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.CATEGORY_ID, categoryId);
         contentValues.put(DatabaseHelper.REMINDER_LOCATION, location);
         db.insert(DatabaseHelper.LOCATION_REMINDER_TABLE, null, contentValues);
     }
-
 
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
