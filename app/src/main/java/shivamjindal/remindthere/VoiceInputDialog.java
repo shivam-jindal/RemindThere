@@ -60,7 +60,7 @@ public class VoiceInputDialog extends DialogFragment {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mdialogListener.onVoiceInputDialogDismiss();
+                mdialogListener.onVoiceInputDialogDismiss(taskText.getText().toString());
             }
         });
 
@@ -69,6 +69,6 @@ public class VoiceInputDialog extends DialogFragment {
 
 
     interface VoiceInputDialogListener {
-        void onVoiceInputDialogDismiss();
+        void onVoiceInputDialogDismiss(String taskTitle);
     }
 }

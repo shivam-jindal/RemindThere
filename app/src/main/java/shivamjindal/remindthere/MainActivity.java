@@ -4,7 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -17,14 +17,14 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
-import static shivamjindal.remindthere.R.id.fab;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements VoiceInputDialog.VoiceInputDialogListener {
 
     boolean linearView = true;
     int REQ_CODE_SPEECH_INPUT = 11;
+    static CoordinatorLayout mainParentLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         final FragmentTransaction transaction = manager.beginTransaction();
         transaction.replace(R.id.container_content_main, mainFragment, "MainFragment");
         transaction.commit();
+        mainParentLayout = (CoordinatorLayout) findViewById(R.id.main_parent_layout);
 
         com.github.clans.fab.FloatingActionButton fabTextInput =
                 (com.github.clans.fab.FloatingActionButton) findViewById(R.id.fab_text_input);
@@ -92,10 +93,13 @@ public class MainActivity extends AppCompatActivity {
                 ArrayList<String> result = data
                         .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-                Constants.showToast(MainActivity.this, result.toString());
+                VoiceInputDialog voiceInputDialog= VoiceInputDialog.newInstance(
+                        result.get(0),
+                        MainActivity.this);
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                voiceInputDialog.show(fragmentManager, "Voice Input Dialog");
             }
-        }
-        else{
+        } else {
             Constants.showToast(MainActivity.this, "Some problem occurred!");
         }
     }
@@ -138,4 +142,13 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+
+    @Override
+    public void onVoiceInputDialogDismiss(String taskTitle) {
+        DatabaseAdapter databaseAdapter = new DatabaseAdapter(getApplicationContext());
+        List<String> subtasks = new ArrayList<>();
+        subtasks.add("");
+        databaseAdapter.insertTask(taskTitle, subtasks, Constants.getNewCategoryID(getApplicationContext()), false);
+        Constants.showToast(getApplicationContext(), "New task added!");
+    }
 }
