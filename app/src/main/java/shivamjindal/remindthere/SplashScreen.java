@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
@@ -25,7 +23,7 @@ public class SplashScreen extends Activity {
         RelativeLayout appDetails = (RelativeLayout) findViewById(R.id.app_details);
 
 
-        Constants.fadeInOutAnimation(appDetails, getApplicationContext());
+        Constants.fadeInAnimation(appDetails, getApplicationContext());
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -34,7 +32,6 @@ public class SplashScreen extends Activity {
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
             }
         },2000);
-
 
     }
 }

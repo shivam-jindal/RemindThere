@@ -89,4 +89,26 @@ class Constants {
         });
         relativeLayout.startAnimation(fadeIn);
     }
+
+
+    static void fadeInAnimation(final RelativeLayout relativeLayout, final Context context) {
+        final Animation fadeIn = AnimationUtils.loadAnimation(context, R.anim.fade_in);
+        fadeIn.setDuration(1500);
+        fadeIn.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                relativeLayout.setVisibility(View.VISIBLE);
+            }
+        });
+        relativeLayout.startAnimation(fadeIn);
+    }
+
 }
