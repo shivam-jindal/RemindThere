@@ -6,6 +6,9 @@ import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -13,7 +16,7 @@ import android.widget.Toast;
  * Created by shivam on 9/4/17.
  */
 
-public class Constants {
+class Constants {
 
 
     /**
@@ -49,4 +52,41 @@ public class Constants {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
+
+
+    static void fadeInOutAnimation(final RelativeLayout relativeLayout, final Context context) {
+        final Animation fadeIn = AnimationUtils.loadAnimation(context, R.anim.fade_in);
+        final Animation fadeOut = AnimationUtils.loadAnimation(context, R.anim.fade_out);
+        fadeOut.setDuration(500);
+        fadeIn.setDuration(1500);
+        fadeIn.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                relativeLayout.setVisibility(View.VISIBLE);
+                fadeOut.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+                    }
+
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                    }
+                });
+                relativeLayout.startAnimation(fadeOut);
+            }
+        });
+        relativeLayout.startAnimation(fadeIn);
+    }
 }
