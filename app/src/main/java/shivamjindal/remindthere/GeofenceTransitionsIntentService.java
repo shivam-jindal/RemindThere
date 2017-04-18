@@ -7,10 +7,16 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -78,18 +84,6 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
     private void sendNotification( String msg ) {
         Log.i(TAG, "sendNotification: " + msg );
-
-        /*// Intent to start the main Activity
-        Intent notificationIntent = MainActivity.makeNotificationIntent(
-                getApplicationContext(), msg
-        );
-
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(notificationIntent);
-        PendingIntent notificationPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-*/
-
         // Creating and sending Notification
         NotificationManager notificatioMng =
                 (NotificationManager) getSystemService( Context.NOTIFICATION_SERVICE );
@@ -100,17 +94,39 @@ public class GeofenceTransitionsIntentService extends IntentService {
 
     // Create a notification
     private Notification createNotification(String msg) {
+        Drawable appIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.app_icon_svg);
+        Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        Uri locUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        SharedPreferences sPrefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        String notificationTone = sPrefs.getString("LOCATION_NOTIFICATION_URI", null);
+        if (notificationTone != null) {
+            locUri = Uri.parse(notificationTone);
+        }
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent,
+                PendingIntent.FLAG_ONE_SHOT);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
         notificationBuilder
-                .setSmallIcon(R.drawable.location_alarm)
-                .setColor(Color.RED)
-                .setContentTitle(msg)
-                .setContentText("Geofence Notification!")
-                //.setContentIntent(notificationPendingIntent)
-                .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
-                .setAutoCancel(true);
-        return notificationBuilder.build();
+                .setSmallIcon(R.drawable.app_icon_svg)
+                .setLargeIcon(Constants.drawableToBitmap(appIcon))
+                .setColor(getApplicationContext().getResources().getColor(R.color.colorAccent))
+                .setContentTitle("RemindThere Location Reminder")
+                .setContentText(msg)
+                .setSound(locUri)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent);
+
+        Notification notification = notificationBuilder.build();
+        if (!sPrefs.getBoolean("LOCATION_VIBRATION", true)) {
+            notificationBuilder.setVibrate(null);
+        } else {
+            notification.defaults |= Notification.DEFAULT_VIBRATE;
+        }
+        return notification;
     }
+
 
     // Handle errors
     private static String getErrorString(int errorCode) {
