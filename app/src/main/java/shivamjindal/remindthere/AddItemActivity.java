@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -63,11 +64,11 @@ public class AddItemActivity extends AppCompatActivity
     EditText title;
     EditText firstTask;
     LinearLayout layoutTasks;
-    SharedPreferences sharedPreferences;
-    RadioButton addCheckboxRadio;
+    CheckBox addCheckboxRadio;
     ImageView locationReminderButton, timeReminderButton;
     int categoryId;
-    int PLACE_PICKET_REQUEST_CODE = 11;
+    int PLACE_PICKET_REQUEST_CODE = 111;
+    Place place;
 
 
     private LocationRequest locationRequest;
@@ -90,10 +91,12 @@ public class AddItemActivity extends AppCompatActivity
         title = (EditText) findViewById(R.id.title_edit_text);
         firstTask = (EditText) findViewById(R.id.first_task);
         layoutTasks = (LinearLayout) findViewById(R.id.tasks_layout);
-        addCheckboxRadio = (RadioButton) findViewById(R.id.add_checkboxes_radio);
+        addCheckboxRadio = (CheckBox) findViewById(R.id.add_checkboxes_radio);
         locationReminderButton = (ImageView) findViewById(R.id.location_alarm_button);
         timeReminderButton = (ImageView) findViewById(R.id.time_alarm_button);
-        categoryId = getNewCategoryID();
+        categoryId = Constants.getNewCategoryID(getApplicationContext());
+
+        title.requestFocus();
 
 
         addItemButton.setOnClickListener(new View.OnClickListener() {
@@ -114,12 +117,16 @@ public class AddItemActivity extends AppCompatActivity
         timeReminderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimeReminderDialog reminderDialog = TimeReminderDialog.newInstance(
-                        title.getText().toString(),
-                        categoryId,
-                        AddItemActivity.this);
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                reminderDialog.show(fragmentManager, "Set Reminder Dialog");
+                if (title.getText().toString().equals("")) {
+                    Constants.showToast(getApplicationContext(), "First enter a title to set reminder!");
+                } else {
+                    TimeReminderDialog reminderDialog = TimeReminderDialog.newInstance(
+                            title.getText().toString(),
+                            categoryId,
+                            AddItemActivity.this);
+                    FragmentManager fragmentManager = getSupportFragmentManager();
+                    reminderDialog.show(fragmentManager, "Set Reminder Dialog");
+                }
             }
         });
 
@@ -127,13 +134,17 @@ public class AddItemActivity extends AppCompatActivity
         locationReminderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                if (title.getText().toString().equals("")) {
+                    Constants.showToast(getApplicationContext(), "First enter a title to set reminder!");
+                } else {
+                    PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
 
-                try {
-                    Intent intent = builder.build(AddItemActivity.this);
-                    startActivityForResult(intent, PLACE_PICKET_REQUEST_CODE);
-                } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
-                    e.printStackTrace();
+                    try {
+                        Intent intent = builder.build(AddItemActivity.this);
+                        startActivityForResult(intent, PLACE_PICKET_REQUEST_CODE);
+                    } catch (GooglePlayServicesRepairableException | GooglePlayServicesNotAvailableException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         });
@@ -168,7 +179,7 @@ public class AddItemActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PLACE_PICKET_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                Place place = PlacePicker.getPlace(this, data);
+                place = PlacePicker.getPlace(this, data);
                 String details = (String) place.getAddress();
                 LatLng placeLatLng = place.getLatLng();
                 String placeLatitude = String.valueOf(placeLatLng.latitude);
@@ -176,16 +187,15 @@ public class AddItemActivity extends AppCompatActivity
                 Log.i("place details : ", details);
 
 
-            /*    LocationReminderDialog locationReminderDialog = LocationReminderDialog.newInstance(
+                LocationReminderDialog locationReminderDialog = LocationReminderDialog.newInstance(
                         title.getText().toString(),
                         categoryId,
                         (String) place.getName(),
                         AddItemActivity.this);
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 locationReminderDialog.show(fragmentManager, "Location Reminder Dialog");
-*/
 
-                startGeofence((String) place.getName(), place.getLatLng(), 100);
+                // startGeofence((String) place.getName(), place.getLatLng(), 100);
             }
         }
     }
@@ -202,7 +212,12 @@ public class AddItemActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.save_item) {
-            saveItemInDatabase();
+            if (title.getText().toString().equals("")) {
+                Constants.showToast(getApplicationContext(), "First enter a title to set reminder!");
+            } else {
+                saveItemInDatabase();
+                Constants.showSnackbar(MainActivity.mainParentLayout, "Item added successfully!");
+            }
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -221,18 +236,6 @@ public class AddItemActivity extends AppCompatActivity
     }
 
 
-    private int getNewCategoryID() {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(
-                getApplicationContext()
-        );
-        int newCategoryId = sharedPreferences.getInt("NEW_CATEGORY_ID", 1);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("NEW_CATEGORY_ID", (newCategoryId + 1));
-        editor.apply();
-        return newCategoryId;
-    }
-
-
     private void goToMainActivity() {
         startActivity(new Intent(AddItemActivity.this, MainActivity.class));
     }
@@ -244,7 +247,7 @@ public class AddItemActivity extends AppCompatActivity
 
     @Override
     public void onLocationDialogDismiss() {
-
+        startGeofence((String) place.getName(), place.getLatLng(), 100);
     }
 
 
@@ -346,8 +349,8 @@ public class AddItemActivity extends AppCompatActivity
 
     // Write location coordinates on UI
     private void writeActualLocation(Location location) {
-     //   textLat.setText("Lat: " + location.getLatitude());
-    //    textLong.setText("Long: " + location.getLongitude());
+        //   textLat.setText("Lat: " + location.getLatitude());
+        //    textLong.setText("Long: " + location.getLongitude());
     }
 
     private void writeLastLocation() {
@@ -411,14 +414,12 @@ public class AddItemActivity extends AppCompatActivity
     }
 
 
-    private void startGeofence(String titleID, LatLng latLng, float radius) {
+    public void startGeofence(String titleID, LatLng latLng, float radius) {
         Log.i(TAG, "startGeofence()");
         Geofence geofence = createGeofence(titleID, latLng, radius);
         GeofencingRequest geofenceRequest = createGeofenceRequest(geofence);
         addGeofence(geofenceRequest);
     }
-
-
 
 
 }
