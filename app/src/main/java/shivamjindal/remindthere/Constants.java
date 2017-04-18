@@ -1,8 +1,14 @@
 package shivamjindal.remindthere;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.view.Gravity;
 import android.view.View;
@@ -25,7 +31,7 @@ class Constants {
      * @param parentView   Parent view in which snack bar is to be shown
      * @param snackbarText Text which is to be displayed in snack bar
      */
-    public static void showSnackbar(View parentView, String snackbarText) {
+    static void showSnackbar(View parentView, String snackbarText) {
         Snackbar snack = Snackbar.make(parentView, snackbarText, Snackbar.LENGTH_SHORT)
                 //.setActionTextColor()
                 .setActionTextColor(Color.YELLOW)
@@ -48,7 +54,7 @@ class Constants {
      * @param text    text to be shown in toast
      * @param context Context object
      */
-    public static void showToast(Context context, String text) {
+    static void showToast(Context context, String text) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
@@ -110,5 +116,31 @@ class Constants {
         });
         relativeLayout.startAnimation(fadeIn);
     }
+
+
+    static int getNewCategoryID(Context context) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(
+                context
+        );
+        int newCategoryId = sharedPreferences.getInt("NEW_CATEGORY_ID", 1);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("NEW_CATEGORY_ID", (newCategoryId + 1));
+        editor.apply();
+        return newCategoryId;
+    }
+
+
+    static Bitmap drawableToBitmap(Drawable drawable) {
+
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable) drawable).getBitmap();
+        }
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
 
 }
