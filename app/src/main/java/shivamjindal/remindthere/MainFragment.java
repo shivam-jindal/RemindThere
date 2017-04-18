@@ -129,9 +129,13 @@ public class MainFragment extends Fragment {
                     icon = Constants.drawableToBitmap(deleteIcon);
 
                     if (dX > 0) {
+                        float temp = dX;
+                        if(temp > itemView.getWidth())
+                            temp = itemView.getWidth();
+
                         background = new RectF((float) itemView.getLeft(),
                                 (float) itemView.getTop(),
-                                dX,
+                                temp,
                                 (float) itemView.getBottom());
 
                         icon_dest = new RectF((float) itemView.getLeft() + width,
@@ -139,7 +143,11 @@ public class MainFragment extends Fragment {
                                 (float) itemView.getLeft() + 2 * width,
                                 (float) itemView.getBottom() - width);
                     } else {
-                        background = new RectF((float) itemView.getRight() + dX,
+                        float temp2 = -dX;
+                        if( temp2 > itemView.getWidth())
+                            temp2 = itemView.getWidth();
+
+                        background = new RectF((float) itemView.getRight() - temp2,
                                 (float) itemView.getTop(),
                                 (float) itemView.getRight(),
                                 (float) itemView.getBottom());
