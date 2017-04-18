@@ -10,6 +10,9 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -140,6 +143,23 @@ class Constants {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
+    }
+
+
+    static void deleteTimeReminderFromDB(Context context, int categoryId){
+        DatabaseAdapter databaseAdapter = new DatabaseAdapter(context);
+        databaseAdapter.deleteDateReminder(categoryId);
+    }
+
+
+    static void refreshFragment(Context context){
+        Fragment fragment;
+        FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();
+        fragment = fragmentManager.findFragmentByTag("MainFragment");
+        final FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.detach(fragment);
+        ft.attach(fragment);
+        ft.commit();
     }
 
 
