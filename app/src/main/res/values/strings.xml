@@ -16,4 +16,9 @@
     <string name="add_location_reminder">Add</string>
     <string name="add_location_reminder_message">Add Reminder to Location</string>
     <string name="selected_location">Selected Location</string>
+    <string name="change_view">Change view</string>
+    <string name="task_1">Task 1</string>
+    <string name="speech_prompt">Add quick task..</string>
+    <string name="speech_not_supported">Speech not supported on your device!</string>
+    <string name="remindthere">RemindThere</string>
 </resources>
