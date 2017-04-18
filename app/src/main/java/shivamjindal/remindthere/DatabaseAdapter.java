@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.media.session.PlaybackState;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -70,6 +71,67 @@ class DatabaseAdapter {
     }
 
 
+    void deleteItem(int categoryId) {
+        db.delete(DatabaseHelper.TASK_TABLE,
+                DatabaseHelper.CATEGORY_ID + " =? ",
+                new String[]{String.valueOf(categoryId)});
+    }
+
+
+    List<Integer> getDateReminderIds() {
+        String[] columns = {DatabaseHelper.CATEGORY_ID};
+        List<Integer> ids = new ArrayList<>();
+        Cursor cursor = db.query(DatabaseHelper.DATE_REMINDER_TABLE, columns, null, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            ids.add(cursor.getInt(0));
+        }
+        cursor.close();
+        return ids;
+    }
+
+
+    List<Integer> getLocationReminderIds() {
+        String[] columns = {DatabaseHelper.CATEGORY_ID};
+        List<Integer> ids = new ArrayList<>();
+        Cursor cursor = db.query(DatabaseHelper.LOCATION_REMINDER_TABLE, columns, null, null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            ids.add(cursor.getInt(0));
+        }
+        cursor.close();
+        return ids;
+    }
+
+
+    String getDateReminder(int categoryId) {
+        String[] columns = {DatabaseHelper.REMINDER_DATE, DatabaseHelper.REMINDER_TIME};
+        String rem;
+        Cursor cursor = db.query(DatabaseHelper.DATE_REMINDER_TABLE,
+                columns,
+                DatabaseHelper.CATEGORY_ID + " =? ", new String[]{String.valueOf(categoryId)},
+                null, null, null, null);
+
+        cursor.moveToNext();
+        rem = cursor.getString(0) + "  |  " + cursor.getString(1);
+        cursor.close();
+        return rem;
+    }
+
+
+    String getLocationReminder(int categoryId) {
+        String[] columns = {DatabaseHelper.REMINDER_LOCATION};
+        String rem;
+        Cursor cursor = db.query(DatabaseHelper.LOCATION_REMINDER_TABLE,
+                columns,
+                DatabaseHelper.CATEGORY_ID + " =? ", new String[]{String.valueOf(categoryId)},
+                null, null, null, null);
+
+        cursor.moveToNext();
+        rem = cursor.getString(0);
+        cursor.close();
+        return rem;
+    }
+
+
     void changeCheck(String taskText, boolean b) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(DatabaseHelper.CHECKED, b);
@@ -131,7 +193,7 @@ class DatabaseAdapter {
                     columns,
                     DatabaseHelper.CATEGORY_ID + " =? ",
                     selectionArgs,
-                    null, null, DatabaseHelper.UID + " DESC ", null);
+                    null, null, DatabaseHelper.CHECKED, null);
 
             while (cursorForTasks.moveToNext()) {
                 Task task = new Task();
