@@ -5,8 +5,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.IntegerRes;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +21,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.List;
@@ -28,7 +35,9 @@ import shivamjindal.remindthere.models.TasksContainer;
  * Created by shivam on 8/4/17.
  */
 
-class OuterRVAdapter extends RecyclerView.Adapter<OuterRVAdapter.OuterAdapterViewHolder> {
+class OuterRVAdapter extends RecyclerView.Adapter<OuterRVAdapter.OuterAdapterViewHolder>
+        implements GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
 
     private List<TasksContainer> taskList;
     private Context context;
@@ -36,8 +45,26 @@ class OuterRVAdapter extends RecyclerView.Adapter<OuterRVAdapter.OuterAdapterVie
     private List<Integer> dateReminderIds;
     private List<Integer> locationReminderIds;
 
-    OuterRVAdapter(List<TasksContainer> taskList) {
+    private GoogleApiClient googleApiClient;
+
+    OuterRVAdapter(List<TasksContainer> taskList, Context context) {
         this.taskList = taskList;
+
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(context)
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .build();
+        }
+        connetApiClient();
+    }
+
+    private void connetApiClient() {
+        if(googleApiClient!=null && !googleApiClient.isConnected()){
+            googleApiClient.connect();
+            //Toast.makeText(context,"Google Api Connected",Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -131,8 +158,16 @@ class OuterRVAdapter extends RecyclerView.Adapter<OuterRVAdapter.OuterAdapterVie
                         .setMessage("Are you sure that you want to delete the reminder?")
                         .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
+                                Intent intent = new Intent(context, GeofenceTransitionsIntentService.class);
+                                PendingIntent gpi = PendingIntent.getService(
+                                        context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+                                if(googleApiClient.isConnected()) {
+                                    LocationServices.GeofencingApi.removeGeofences(googleApiClient, gpi);
+                                }
 
+                                Constants.deleteLocationReminderFromDB(context, taskList.get(holder.getAdapterPosition()).getCategoryId());
+                                Constants.refreshFragment(context);
                             }
                         })
                         .setNegativeButton("CANCEL", null)
@@ -157,6 +192,26 @@ class OuterRVAdapter extends RecyclerView.Adapter<OuterRVAdapter.OuterAdapterVie
         databaseAdapter.deleteItem(taskList.get(swipedPosition).getCategoryId());
         taskList.remove(swipedPosition);
         notifyItemRemoved(swipedPosition);
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+       googleApiClient.connect();
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+    @Override
+    public void onResult(@NonNull Status status) {
+
     }
 
 
