@@ -41,7 +41,7 @@ public class VoiceInputDialog extends DialogFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.voice_input_dialog, container, false);
         taskText = (EditText) view.findViewById(R.id.task_input);
         cancelButton = (Button) view.findViewById(R.id.cancel_action);
@@ -61,6 +61,7 @@ public class VoiceInputDialog extends DialogFragment {
             @Override
             public void onClick(View view) {
                 mdialogListener.onVoiceInputDialogDismiss(taskText.getText().toString());
+                onDismiss(getDialog());
             }
         });
 

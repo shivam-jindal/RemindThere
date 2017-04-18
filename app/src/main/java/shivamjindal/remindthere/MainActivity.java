@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -150,5 +151,17 @@ public class MainActivity extends AppCompatActivity implements VoiceInputDialog.
         subtasks.add("");
         databaseAdapter.insertTask(taskTitle, subtasks, Constants.getNewCategoryID(getApplicationContext()), false);
         Constants.showToast(getApplicationContext(), "New task added!");
+        refreshFragment();
+    }
+
+
+    void refreshFragment(){
+        Fragment fragment;
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragment = fragmentManager.findFragmentByTag("MainFragment");
+        final FragmentTransaction ft = fragmentManager.beginTransaction();
+        ft.detach(fragment);
+        ft.attach(fragment);
+        ft.commit();
     }
 }

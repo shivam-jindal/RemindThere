@@ -132,6 +132,8 @@ public class MainFragment extends Fragment {
                         float temp = dX;
                         if(temp > itemView.getWidth())
                             temp = itemView.getWidth();
+                        if(temp < itemView.getLeft())
+                            temp += itemView.getLeft();
 
                         background = new RectF((float) itemView.getLeft(),
                                 (float) itemView.getTop(),
