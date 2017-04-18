@@ -7,4 +7,5 @@
     <color name="reminder_dialog_color">#222222</color>
     <color name="divider">@color/colorAccent</color>
     <color name="delete_card_background">#990000</color>
+    <color name="reminder_text">@color/colorAccent</color>
 </resources>

@@ -21,4 +21,7 @@
     <string name="speech_prompt">Add quick task..</string>
     <string name="speech_not_supported">Speech not supported on your device!</string>
     <string name="remindthere">RemindThere</string>
+    <string name="settings_notification_tone">Reminder Tone</string>
+    <string name="settings_vibrate">Vibration</string>
+    <string name="title_activity_settings">Settings</string>
 </resources>
