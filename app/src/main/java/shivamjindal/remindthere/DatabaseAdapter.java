@@ -70,6 +70,13 @@ class DatabaseAdapter {
     }
 
 
+    void changeCheck(String taskText, boolean b) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHelper.CHECKED, b);
+        db.update(DatabaseHelper.TASK_TABLE, contentValues, DatabaseHelper.TASK_TEXT + " =? ", new String[]{taskText});
+    }
+
+
     TasksContainer getTaskContainer(int categoryId) {
         TasksContainer tasksContainer = new TasksContainer();
         String[] columns = {
@@ -108,9 +115,11 @@ class DatabaseAdapter {
                 DatabaseHelper.CHECKED,
         };
 
-        Cursor cursorForCategories = db.query(true, DatabaseHelper.TASK_TABLE,
+        Cursor cursorForCategories = db.query(true,
+                DatabaseHelper.TASK_TABLE,
                 new String[]{DatabaseHelper.TASK_TITLE, DatabaseHelper.CATEGORY_ID},
-                null, null, null, null, null, null);
+                null, null, null, null,
+                DatabaseHelper.UID + " DESC ", null);
 
         while (cursorForCategories.moveToNext()) {
             TasksContainer newTaskContainer = new TasksContainer();
@@ -122,7 +131,7 @@ class DatabaseAdapter {
                     columns,
                     DatabaseHelper.CATEGORY_ID + " =? ",
                     selectionArgs,
-                    null, null, null, null);
+                    null, null, DatabaseHelper.UID + " DESC ", null);
 
             while (cursorForTasks.moveToNext()) {
                 Task task = new Task();
