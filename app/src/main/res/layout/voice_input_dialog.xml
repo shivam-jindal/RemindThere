@@ -45,7 +45,6 @@
             android:backgroundTint="@color/reminder_dialog_color"
             android:drawableEnd="@drawable/ic_edit_icon"
             android:drawablePadding="4dp"
-            android:focusable="false"
             android:inputType="textMultiLine"
             android:maxLines="5" />
 
