@@ -64,7 +64,6 @@ public class LocationReminderDialog extends DialogFragment {
                 DatabaseAdapter databaseAdapter = new DatabaseAdapter(getContext());
                 databaseAdapter.insertLocationReminder(categoryId, location);
                 onDismiss(getDialog());
-                Constants.showToast(getContext(), "Set successfully!");
             }
         });
 

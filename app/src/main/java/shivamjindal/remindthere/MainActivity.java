@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements VoiceInputDialog.
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
             return true;
         }
 
