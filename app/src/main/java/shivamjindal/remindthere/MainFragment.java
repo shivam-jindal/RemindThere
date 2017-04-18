@@ -43,7 +43,7 @@ public class MainFragment extends Fragment {
         outerRecyclerView.setHasFixedSize(true);
 
         DatabaseAdapter databaseAdapter = new DatabaseAdapter(getContext());
-        outerRVAdapter = new OuterRVAdapter(databaseAdapter.getAllTasks());
+        outerRVAdapter = new OuterRVAdapter(databaseAdapter.getAllTasks(), getContext());
         outerRecyclerView.setAdapter(outerRVAdapter);
 
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);

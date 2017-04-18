@@ -152,6 +152,12 @@ class Constants {
     }
 
 
+    static void deleteLocationReminderFromDB(Context context, int categoryId){
+        DatabaseAdapter databaseAdapter = new DatabaseAdapter(context);
+        databaseAdapter.deleteLocationReminder(categoryId);
+    }
+
+
     static void refreshFragment(Context context){
         Fragment fragment;
         FragmentManager fragmentManager = ((MainActivity)context).getSupportFragmentManager();

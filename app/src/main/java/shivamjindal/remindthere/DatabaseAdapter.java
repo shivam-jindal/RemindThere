@@ -125,7 +125,7 @@ class DatabaseAdapter {
     }
 
 
-    void deletLocationReminder(int categoryId) {
+    void deleteLocationReminder(int categoryId) {
         db.delete(DatabaseHelper.LOCATION_REMINDER_TABLE,
                 DatabaseHelper.CATEGORY_ID + " =? ",
                 new String[]{String.valueOf(categoryId)}
