@@ -1,9 +1,13 @@
 package shivamjindal.remindthere;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.provider.ContactsContract;
 import android.support.annotation.IntegerRes;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +16,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.location.LocationServices;
 
 import java.util.List;
 
@@ -86,7 +93,33 @@ class OuterRVAdapter extends RecyclerView.Adapter<OuterRVAdapter.OuterAdapterVie
         holder.dateReminderDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new AlertDialog.Builder(context)
+                        .setMessage("Are you sure that you want to delete the reminder?")
+                        .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Intent intent = new Intent(context, AlarmReceiver.class);
 
+                                intent.putExtra("TITLE_TEXT", taskList.get(holder.getAdapterPosition()).getTitle());
+                                intent.putExtra("CATEGORY_ID", taskList.get(holder.getAdapterPosition()).getCategoryId());
+                                PendingIntent pendingIntent = PendingIntent
+                                        .getBroadcast(
+                                                context,
+                                                taskList.get(holder.getAdapterPosition()).getCategoryId(),
+                                                intent,
+                                                PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                AlarmManager alarmManager = (AlarmManager) (context.getSystemService(Context.ALARM_SERVICE));
+                                pendingIntent.cancel();
+                                alarmManager.cancel(pendingIntent);
+
+                                Constants.deleteTimeReminderFromDB(context, taskList.get(holder.getAdapterPosition()).getCategoryId());
+                                Constants.refreshFragment(context);
+
+                                Toast.makeText(context, "Reminder Deleted Successfully!", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("CANCEL", null)
+                        .show();
             }
         });
 
@@ -94,7 +127,16 @@ class OuterRVAdapter extends RecyclerView.Adapter<OuterRVAdapter.OuterAdapterVie
         holder.locationReminderDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new AlertDialog.Builder(context)
+                        .setMessage("Are you sure that you want to delete the reminder?")
+                        .setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
 
+
+                            }
+                        })
+                        .setNegativeButton("CANCEL", null)
+                        .show();
             }
         });
     }
