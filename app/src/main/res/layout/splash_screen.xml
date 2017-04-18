@@ -24,7 +24,7 @@
             android:layout_centerHorizontal="true"
             android:layout_gravity="center"
             android:layout_marginBottom="8dp"
-            android:src="@drawable/ic_location_pin" />
+            android:src="@drawable/app_icon_white" />
 
         <TextView
             android:id="@+id/app_name"
