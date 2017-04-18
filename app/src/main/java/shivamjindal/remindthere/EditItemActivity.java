@@ -129,6 +129,20 @@ public class EditItemActivity extends AppCompatActivity implements TimeReminderD
             }
         });
 
+        addItemButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EditText newTask = new EditText(EditItemActivity.this);
+
+                newTask.setLayoutParams(new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
+                layoutTasks.addView(newTask);
+                newTask.setHint("Task " + layoutTasks.getChildCount());
+                newTask.requestFocus();
+            }
+        });
+
         createGoogleApi();
     }
 
