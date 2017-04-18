@@ -117,6 +117,22 @@ class DatabaseAdapter {
     }
 
 
+    void deleteDateReminder(int categoryId) {
+        db.delete(DatabaseHelper.DATE_REMINDER_TABLE,
+                DatabaseHelper.CATEGORY_ID + " =? ",
+                new String[]{String.valueOf(categoryId)}
+        );
+    }
+
+
+    void deletLocationReminder(int categoryId) {
+        db.delete(DatabaseHelper.LOCATION_REMINDER_TABLE,
+                DatabaseHelper.CATEGORY_ID + " =? ",
+                new String[]{String.valueOf(categoryId)}
+        );
+    }
+
+
     String getLocationReminder(int categoryId) {
         String[] columns = {DatabaseHelper.REMINDER_LOCATION};
         String rem;
