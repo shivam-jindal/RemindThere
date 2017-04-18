@@ -24,12 +24,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title"
-        android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="36dp"
+        android:layout_marginTop="-4dp"
         android:orientation="horizontal"
-        android:padding="4dp">
+        android:padding="4dp"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="16dp"
@@ -41,19 +42,19 @@
             android:id="@+id/date_reminder_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
-            android:layout_gravity="center_vertical"
             android:textColor="@color/reminder_text" />
 
         <ImageView
             android:id="@+id/date_reminder_delete"
             android:layout_width="16dp"
             android:layout_height="16dp"
-            android:foregroundGravity="right"
             android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_delete_black"/>
+            android:foregroundGravity="right"
+            android:src="@drawable/ic_delete_black" />
 
     </LinearLayout>
 
@@ -63,12 +64,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/date_reminder_layout"
-        android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="36dp"
+        android:layout_marginTop="-4dp"
         android:orientation="horizontal"
-        android:padding="4dp">
+        android:padding="4dp"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="16dp"
@@ -80,9 +82,9 @@
             android:id="@+id/location_reminder_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:paddingLeft="4dp"
-            android:layout_gravity="center_vertical"
             android:paddingRight="4dp"
             android:textColor="@color/reminder_text" />
 
