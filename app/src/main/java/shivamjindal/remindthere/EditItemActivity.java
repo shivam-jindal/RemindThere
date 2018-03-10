@@ -59,7 +59,7 @@ public class EditItemActivity extends AppCompatActivity implements TimeReminderD
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_edit_item);
+        setContentView(R.layout.activity_item);
         addItemButton = (TextView) findViewById(R.id.add_item_button);
         title = (EditText) findViewById(R.id.title_edit_text);
         firstTask = (EditText) findViewById(R.id.first_task);
@@ -77,7 +77,7 @@ public class EditItemActivity extends AppCompatActivity implements TimeReminderD
 
             if (tasksContainer.getTasks().size() > 0) {
                 firstTask.setText(tasksContainer.getTasks().get(0).getTaskName());
-                addCheckboxRadio.setChecked(tasksContainer.getTasks().get(0).isCheckVisible());
+                addCheckboxRadio.setChecked(tasksContainer.getTasks().get(0).isChecked());
             }
 
             for (int i = 1; i < tasksContainer.getTasks().size(); i++) {

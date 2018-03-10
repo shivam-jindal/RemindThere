@@ -48,7 +48,7 @@ public class MainFragment extends Fragment {
 
         staggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         linearLayoutManager = new LinearLayoutManager(getContext());
-        outerRecyclerView.setLayoutManager(linearLayoutManager);
+        outerRecyclerView.setLayoutManager(staggeredGridLayoutManager);
         initSwipe();
         return view;
     }
@@ -56,7 +56,7 @@ public class MainFragment extends Fragment {
 
     private void initSwipe() {
         //ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT)
-        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT ) {
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
 
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
@@ -130,9 +130,9 @@ public class MainFragment extends Fragment {
 
                     if (dX > 0) {
                         float temp = dX;
-                        if(temp > itemView.getWidth())
+                        if (temp > itemView.getWidth())
                             temp = itemView.getWidth();
-                        if(temp < itemView.getLeft())
+                        if (temp < itemView.getLeft())
                             temp += itemView.getLeft();
 
                         background = new RectF((float) itemView.getLeft(),
@@ -140,13 +140,14 @@ public class MainFragment extends Fragment {
                                 temp,
                                 (float) itemView.getBottom());
 
-                        icon_dest = new RectF((float) itemView.getLeft() + width,
-                                (float) itemView.getTop() + width,
-                                (float) itemView.getLeft() + 2 * width,
-                                (float) itemView.getBottom() - width);
+                        c.drawRect(background, p);
+                        c.drawBitmap(icon,
+                                (float) itemView.getLeft() + 16,
+                                (float) itemView.getTop() + ((float) itemView.getBottom() - (float) itemView.getTop() - icon.getHeight()) / 2,
+                                p);
                     } else {
                         float temp2 = -dX;
-                        if( temp2 > itemView.getWidth())
+                        if (temp2 > itemView.getWidth())
                             temp2 = itemView.getWidth();
 
                         background = new RectF((float) itemView.getRight() - temp2,
@@ -154,13 +155,12 @@ public class MainFragment extends Fragment {
                                 (float) itemView.getRight(),
                                 (float) itemView.getBottom());
 
-                        icon_dest = new RectF((float) itemView.getRight() - 2 * width,
-                                (float) itemView.getTop() + width,
-                                (float) itemView.getRight() - width,
-                                (float) itemView.getBottom() - width);
+                        c.drawRect(background, p);
+                        c.drawBitmap(icon,
+                                (float) itemView.getRight() - 16 - icon.getWidth(),
+                                (float) itemView.getTop() + ((float) itemView.getBottom() - (float) itemView.getTop() - icon.getHeight()) / 2,
+                                p);
                     }
-                    c.drawRect(background, p);
-                    c.drawBitmap(icon, null, icon_dest, p);
                 }
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             }

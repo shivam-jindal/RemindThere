@@ -3,12 +3,9 @@ package shivamjindal.remindthere;
 import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -21,10 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -85,7 +80,7 @@ public class AddItemActivity extends AppCompatActivity
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_item_activity);
+        setContentView(R.layout.activity_item);
 
         addItemButton = (TextView) findViewById(R.id.add_item_button);
         title = (EditText) findViewById(R.id.title_edit_text);

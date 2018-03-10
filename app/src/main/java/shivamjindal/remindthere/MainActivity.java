@@ -23,7 +23,7 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements VoiceInputDialog.VoiceInputDialogListener {
 
-    boolean linearView = true;
+    boolean linearView = false;
     int REQ_CODE_SPEECH_INPUT = 11;
     static CoordinatorLayout mainParentLayout;
 
