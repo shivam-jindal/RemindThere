@@ -7,21 +7,23 @@
     <string name="save_item">Save item</string>
     <string name="title_activity_edit_item">Edit task</string>
     <string name="add_checkbox">Add checkboxes</string>
-    <string name="add_reminder_message">Add a reminder..</string>
+    <string name="add_reminder_message">Add a reminder…</string>
     <string name="cancel_action">Cancel</string>
     <string name="set_reminder">Add</string>
-
     <string name="api_key">AIzaSyC7awnCDItO9F3cGzq37_H1FTcw-DSwWwE</string>
     <string name="cancel">Cancel</string>
     <string name="add_location_reminder">Add</string>
-    <string name="add_location_reminder_message">Add Reminder to Location</string>
-    <string name="selected_location">Selected Location</string>
+    <string name="add_location_reminder_message">Add reminder to location</string>
+    <string name="selected_location">Selected location</string>
     <string name="change_view">Change view</string>
     <string name="task_1">Task 1</string>
     <string name="speech_prompt">Add quick task..</string>
     <string name="speech_not_supported">Speech not supported on your device!</string>
     <string name="remindthere">RemindThere</string>
-    <string name="settings_notification_tone">Reminder Tone</string>
+    <string name="settings_notification_tone">Reminder tone</string>
     <string name="settings_vibrate">Vibration</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="datetime_reminder">Date-time reminder</string>
+    <string name="location_reminder">Location reminder</string>
+    <string name="tasks">Tasks</string>
 </resources>
